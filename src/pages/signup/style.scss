@@ -1,0 +1,6 @@
+.Signup {
+	width: 18.75rem;
+	& > *:not(last-child) {
+		margin-bottom: 0.5rem;
+	}
+}

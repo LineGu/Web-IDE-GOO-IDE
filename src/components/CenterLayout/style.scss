@@ -1,0 +1,12 @@
+.CenterLayout{
+	& > *:not(:last-child) {
+		margin-bottom: 1rem;
+	}
+	&_wrapper {
+		display: flex;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
+		background-color: #F5F5F5;
+	}
+}

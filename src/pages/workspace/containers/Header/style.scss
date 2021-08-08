@@ -1,0 +1,14 @@
+.Header {
+	height: 3.125rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding-left: 1.25rem;
+	padding-right: 1.25rem;
+	background-color: #3e85e4;
+	
+	:global(body) & &__dropdown {
+		color: #fff;
+		cursor: pointer;
+	}
+}

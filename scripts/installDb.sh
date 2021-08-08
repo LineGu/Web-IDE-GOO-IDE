@@ -1,0 +1,1 @@
+./installMongodb.sh && ./installRedis.sh

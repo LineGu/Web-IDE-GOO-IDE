@@ -1,0 +1,13 @@
+.Signin {
+	width: 18.75rem;
+	& > *:not(:last-child) {
+		margin-bottom: 0.5rem;
+	}
+	&__signin_btn {
+		margin-top: 1rem;
+		text-align: center;
+	}
+	&__signup_btn {
+		text-align: center;
+	}
+}

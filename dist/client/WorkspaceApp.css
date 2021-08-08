@@ -1,0 +1,15 @@
+.style__Header__1KCpN_ {
+  height: 3.125rem;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: end;
+      justify-content: flex-end;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  background-color: #3e85e4; }
+  body .style__Header__1KCpN_ .style__Header__dropdown__1AzNcO {
+    color: #fff;
+    cursor: pointer; }
+

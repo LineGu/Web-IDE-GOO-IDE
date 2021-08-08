@@ -1,0 +1,13 @@
+.AccountButtonGroup {
+	&__btn {
+		width: 100%;
+		&_wrapper {
+			margin-top: 1rem;
+		}
+	}
+	
+	&__link_wrapper {
+		text-align: center;
+		font-size: 0.75rem;
+	}
+}
