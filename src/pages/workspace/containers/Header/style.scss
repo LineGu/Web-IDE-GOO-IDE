@@ -1,11 +1,23 @@
 .Header {
-	height: 3.125rem;
+	height: 6.125rem;
 	display: flex;
+	position:relative;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: center;
 	padding-left: 1.25rem;
 	padding-right: 1.25rem;
 	background-color: #3e85e4;
+	
+	&__idzone {
+		position: absolute;
+		right:1.5em;
+		bottom:1em;
+	}
+	
+	p {
+		font-size: 3em;
+		font-weight: 600;
+	}
 	
 	:global(body) & &__dropdown {
 		color: #fff;

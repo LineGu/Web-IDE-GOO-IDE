@@ -28,7 +28,8 @@ class Header extends React.Component {
 		const { userId } = this.state;
 		return (
 			<div className={style.Header}>
-				<UncontrolledDropdown>
+				<p>File Manager</p>
+				<UncontrolledDropdown className={style.Header__idzone}>
 					<DropdownToggle caret tag="a" className={style.Header__dropdown}>
 						{userId}
 					</DropdownToggle>

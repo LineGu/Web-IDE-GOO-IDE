@@ -11,7 +11,8 @@ module.exports = {
 	target: 'web',
 	entry: {
 		AccountApp: path.resolve('./src/apps/account/client.jsx'),
-		WorkspaceApp: path.resolve('./src/apps/workspace/client.jsx')
+		WorkspaceApp: path.resolve('./src/apps/workspace/client.jsx'),
+		EditorApp: path.resolve('./src/apps/editor/client.jsx')
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist/client'),
@@ -31,6 +32,7 @@ module.exports = {
 						loader: 'babel-loader',
 						options: {
 							cacheDirectory: true
+
 						}
 					}
 				]

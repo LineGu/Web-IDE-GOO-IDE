@@ -1,15 +1,55 @@
 .style__Header__1KCpN_ {
-  height: 3.125rem;
+  height: 6.125rem;
   display: -ms-flexbox;
   display: flex;
+  position: relative;
   -ms-flex-align: center;
       align-items: center;
-  -ms-flex-pack: end;
-      justify-content: flex-end;
+  -ms-flex-pack: center;
+      justify-content: center;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
   background-color: #3e85e4; }
+  .style__Header__idzone__WKBzV8 {
+    position: absolute;
+    right: 1.5em;
+    bottom: 1em; }
+  .style__Header__1KCpN_ p {
+    font-size: 3em;
+    font-weight: 600; }
   body .style__Header__1KCpN_ .style__Header__dropdown__1AzNcO {
     color: #fff;
     cursor: pointer; }
+
+.style__Card__3I8XZ3 {
+  -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
+  width: 20rem;
+  height: 15vh; }
+
+.style__CardGroup__wxKejz {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: start;
+      justify-content: start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-align: center;
+      align-items: center;
+  margin-top: 2em; }
+  .style__CardGroup__card__PO7LR1 {
+    margin: 2em; }
+
+.style__plusBtn__3fghAA {
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  margin: 2em; }
+  .style__plusBtn__3fghAA > svg {
+    width: 3em;
+    height: 3em; }
+    .style__plusBtn__3fghAA > svg:hover {
+      cursor: pointer;
+      opacity: 60%; }
 

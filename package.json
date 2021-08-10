@@ -7,7 +7,9 @@
 		"start:prd": "NODE_ENV=production node app.js",
 		"start:dev": "NODE_ENV=development node app.js",
 		"build:dev": "rm -rf ./dist && NODE_ENV=development webpack",
-		"build:prd": "NODE_ENV=production webpack"
+		"build:prd": "NODE_ENV=production webpack",
+		"watch": "npm run build:dev && npm run start:dev",
+		"dbStart": "./scripts/startDb.sh"
 	},
 	"author": "",
 	"license": "ISC",
@@ -23,6 +25,7 @@
 		"mongoose": "^5.5.5",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
+		"react-icons": "^4.2.0",
 		"react-router-dom": "^5.0.0",
 		"reactstrap": "^8.0.0",
 		"redis": "^2.8.0",

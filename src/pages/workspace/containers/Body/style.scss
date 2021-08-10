@@ -1,0 +1,24 @@
+.CardGroup {
+	display:flex;
+	justify-content:start;
+	flex-wrap: wrap;
+	align-items:center;
+	margin-top: 2em;
+	&__card {
+		margin:2em;
+	}
+}
+
+.plusBtn {
+	justify-content:center;
+	align-items:center;
+	margin:2em;
+	& > svg {
+		width:3em;
+		height:3em;
+		&:hover {
+			cursor: pointer;
+			opacity: 60%;
+		}
+	}
+}

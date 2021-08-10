@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const modAccount = require('../../../models/account');
+const DB = require('../../../models/DB')
 const util = require('./util');
 const Error = require('../util/error');
 
 const findById = async id => {
-	const accountInfo = await modAccount.findOne({ id });
+	const accountInfo = await DB.Account.findOne({ id });
 	return accountInfo;
 };
 
@@ -43,9 +43,9 @@ const add = async (id, pw) => {
 	}
 
 	const hashedPw = await util.genHashedPw(pw);
-	const newAccountInfo = new modAccount({ id, pw: hashedPw });
+	const newAccountInfo = new DB.Account({ id, pw: hashedPw });
 
-	await newAccountInfo.save();
+	await newAccountInfo.save()
 	return true;
 };
 

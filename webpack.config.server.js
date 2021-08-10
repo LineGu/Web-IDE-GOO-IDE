@@ -9,7 +9,8 @@ module.exports = {
 	target: 'node',
 	entry: {
 		AccountApp: path.resolve('./src/apps/account/server.jsx'),
-		WorkspaceApp: path.resolve('./src/apps/workspace/server.jsx')
+		WorkspaceApp: path.resolve('./src/apps/workspace/server.jsx'),
+		EditorApp: path.resolve('./src/apps/editor/server.jsx')
 	},
 	node: {
 		__dirname: true,
