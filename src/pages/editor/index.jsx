@@ -3,18 +3,22 @@ import ProjectProvider from './model/provider';
 import FolderBlock from 'components/FolderBlock'
 import FileBlock from 'components/FileBlock'
 
-import Header from './containers/Header'
+import SideBar from './containers/SideBar'
+import Body from './containers/Body'
 import { useLocation } from 'react-router-dom';
+
+import style from './style.scss'
 
 const Editor = () => {
 	const location = useLocation()
 	
 	return(
-	<React.Fragment>
+	<div className={style.Editor}>
 		<ProjectProvider title={location.pathname.split('/')[1]}>
-			<Header/>
+			<SideBar/>
+			<Body/>
 		</ProjectProvider>
-	</React.Fragment>
+	</div>
 )}
 
 export default Editor;

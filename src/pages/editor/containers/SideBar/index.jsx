@@ -5,34 +5,28 @@ import useProject from '../../hooks/useProject';
 import fileManager from '../../model/manager';
 import FolderBlock from 'components/FolderBlock'
 import FileBlock from 'components/FileBlock'
-import FileEditor from 'components/FileEditor'
+
+import style from './style.scss'
 
 const ignoreFiles = ['.git', '.DS_Store', 'node_modules'];
 
-function Header() {
-	const { state } = useProject()
-	const [fileOpend, setFileOpend] = useState(null)
-	const [editorValue, setEditorValue ] = useState('')
+function SideBar() {
+	const { fileState, fileOpend, setFileOpend } = useProject()
 	const [files, setFiles] = useState(fileManager.files);
 	
 	const onClickFile = (e, path) => {
 		e.stopPropagation()
 		const file = fileManager.getFile(path)
 		setFileOpend(file)
-		setEditorValue(file.content)
 	}
 	
-	const onChangeInput = (e) => {
-		setEditorValue(e.target.value)
-	}
-	
-	const create = (files) => {
+	const createFileTree = (files) => {
     	return fileManager.sortProject(files).map((fileKey) => {
 			const isIgnoreFile = ignoreFiles.indexOf(fileKey) !== -1
         	if (isIgnoreFile) return null;
 			const file = files[fileKey];
 			if (file.type === 'directory') {
-			  const children = create(file.children);
+			  const children = createFileTree(file.children);
 			  return (
 				<FolderBlock fileName={fileKey} path={file.path}>
 				  {children}
@@ -55,11 +49,10 @@ function Header() {
           setFiles(fileManager.files);
     }
 
-	return (<div>
-			{fileOpend ? <FileEditor title={fileOpend.name} content={editorValue} onChange={onChangeInput}/> : null}
+	return (<div className={style.SideBar}>
 				<FileGetter onChange={onChange} directoryAble={true}/>
-				{files ? create(files) : null}
+				{files ? createFileTree(files) : null}
 			</div>)
 }
 
-export default Header;
+export default SideBar;
