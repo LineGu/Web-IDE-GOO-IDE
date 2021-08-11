@@ -20,11 +20,14 @@ function ProjectProvider({ title, children }) {
 			});
 	};
 	
+	const setProject = () => {
+		dispatcher.loading();
+		
+	}
+	
 	useEffect(() => {
-		console.log('채ㅡㄷ')
 		getProject()
 	},[])
-	console.log(state.data)
 
 	return (
 		<ProjectContext.Provider value={{ state, getProject }}>

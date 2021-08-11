@@ -20,6 +20,11 @@ module.exports = {
 		chunkFilename: configUtil.isDev ? '[name].js' : '[name].[hash:8].js',
 		publicPath: '/'
 	},
+	watchOptions: {
+		aggregateTimeout: 200,
+		ignored: /node_modules/,
+		poll: 1000,
+  	},
 	resolve: configUtil.resolve,
 	module: {
 		rules: [

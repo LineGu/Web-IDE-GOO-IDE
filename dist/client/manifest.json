@@ -1,6 +1,7 @@
 {
   "AccountApp.css": "/AccountApp.css",
   "AccountApp.js": "/AccountApp.js",
+  "EditorApp.css": "/EditorApp.css",
   "EditorApp.js": "/EditorApp.js",
   "WorkspaceApp.css": "/WorkspaceApp.css",
   "WorkspaceApp.js": "/WorkspaceApp.js"

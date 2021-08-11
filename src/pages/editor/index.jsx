@@ -1,19 +1,18 @@
-import React from 'react';
-import ProjectProvider from 'components/project/provider';
-import FileGetter from 'components/FileGetter';
+import React, { useEffect } from 'react';
+import ProjectProvider from './model/provider';
 import FolderBlock from 'components/FolderBlock'
 import FileBlock from 'components/FileBlock'
-import {useLocation} from 'react-router-dom'
 
-const Editor = ({match}) => {
-	useLocation()
-	React.useEffect(() => console.log(1),[match])
+import Header from './containers/Header'
+import { useLocation } from 'react-router-dom';
+
+const Editor = () => {
+	const location = useLocation()
 	
 	return(
 	<React.Fragment>
-		<FileGetter></FileGetter>
-		<ProjectProvider title={match.params.title}>
-			<FolderBlock fileName='zz'></FolderBlock>
+		<ProjectProvider title={location.pathname.split('/')[1]}>
+			<Header/>
 		</ProjectProvider>
 	</React.Fragment>
 )}

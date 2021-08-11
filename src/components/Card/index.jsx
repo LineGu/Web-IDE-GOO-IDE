@@ -12,7 +12,7 @@ const Card = ({title = '', description = '', btnLabel = '', children = null, lin
 				<CardText>
 					{description}				
 				</CardText>
-				<Link to={linkTo}>{btnLabel}</Link>
+				<Button onClick={() => window.location.href = linkTo}>{btnLabel}</Button>
 			</React.Fragment>
 			}
 	</CD>
