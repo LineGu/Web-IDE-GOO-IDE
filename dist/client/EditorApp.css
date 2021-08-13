@@ -33,9 +33,41 @@
     background-color: #1F1E1E;
     color: #ffffff; }
 
+.style__Header__3HstVl {
+  background-color: #2C2C2C;
+  width: 100%;
+  color: #ffffff; }
+  .style__Header__3HstVl strong {
+    margin: 0;
+    padding: 0; }
+  .style__Header__3HstVl p {
+    font-size: 3em;
+    margin: 0 0 0 1em;
+    padding: 0; }
+  .style__Header__3HstVl hr {
+    height: 2px;
+    background-color: #1C1C1C;
+    margin: 0;
+    padding: 0; }
+  .style__Header_slash__TBckv4 {
+    margin: 0 0.6em; }
+  .style__Header__3HstVl svg {
+    margin-right: 0.4em; }
+  .style__Header_path__2HT1Q8 {
+    margin-left: 1vw;
+    height: 2em;
+    text-align: center; }
+
 .style__Editor__4hPlfw {
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
   width: 100%;
   height: 100%; }
+  .style__Editor_bodyWrapper__48a9BX {
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    height: 100%; }
 

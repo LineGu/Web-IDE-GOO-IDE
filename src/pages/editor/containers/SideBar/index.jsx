@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FileGetter from 'components/FileGetter';
 import useProject from '../../hooks/useProject';
@@ -11,9 +11,18 @@ import style from './style.scss'
 const ignoreFiles = ['.git', '.DS_Store', 'node_modules'];
 
 function SideBar() {
-	const { fileState, fileOpend, setFileOpend } = useProject()
-	const [files, setFiles] = useState(fileManager.files);
+	const { fileState, fileOpend, setFileOpend, setProject } = useProject()
+	const initFile = fileState.data ? fileState.data.files : fileManager.files
+	const [files, setFiles] = useState(initFile);
 	
+	useEffect(() => {
+		if(fileState.data) {
+			setFiles(fileState.data.files)
+			console.log(fileState.data.files)
+			fileManager.files = fileState.data.files
+		}
+	},[fileState])
+
 	const onClickFile = (e, path) => {
 		e.stopPropagation()
 		const file = fileManager.getFile(path)
@@ -47,6 +56,9 @@ function SideBar() {
           setFiles(fileManager.files);
           await fileManager.readLazyFile();
           setFiles(fileManager.files);
+			console.log(1)
+		  await setProject(fileManager.files)  
+		console.log(2)
     }
 
 	return (<div className={style.SideBar}>

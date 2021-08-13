@@ -14,6 +14,7 @@ function ProjectProvider({ title, children }) {
 		axios
 			.get(`/api/project/info/${title}`)
 			.then(({ data }) => {
+				data.files = JSON.parse(data.files)
 				dispatcher.success(data);
 			})
 			.catch((err) => {
@@ -21,9 +22,17 @@ function ProjectProvider({ title, children }) {
 			});
 	};
 	
-	const setProject = () => {
+	const setProject = (files) => {
 		dispatcher.loading();
-		
+		axios
+			.post(`/api/project/info/${title}`,{files})
+			.then(({ data }) => {
+				dispatcher.success(files);
+			})
+			.catch((err) => {
+			console.log(err)
+				dispatcher.error(err);
+			});
 	}
 	
 	useEffect(() => {
@@ -31,7 +40,7 @@ function ProjectProvider({ title, children }) {
 	},[])
 
 	return (
-		<ProjectContext.Provider value={{ fileState, getProject, fileOpend, setFileOpend }}>
+		<ProjectContext.Provider value={{ fileState, getProject, fileOpend, setFileOpend, setProject }}>
 			{children}
 		</ProjectContext.Provider>
 	);
