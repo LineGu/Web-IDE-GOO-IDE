@@ -1,3 +1,18 @@
 .File {
+	background-color: #232323;
+	font-size: 14px;
 	list-style:none;
+	padding: 0;
+	margin: 0;
+	user-select: none;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 100%;
+	svg {
+		margin-right: 0.2em;
+	}
+	&:hover {
+		cursor:pointer;
+	}
 }

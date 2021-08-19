@@ -1,6 +1,10 @@
 const router = require('express').Router();
 const DB = require('../../../models/DB')
 const Error = require('../util/error');
+const multer = require("multer");
+const fs = require('fs')
+
+var upload = multer({preservePath:true});
 
 const findByIdAndTitle = async (id,title) => {
 	const projectInfo = await DB.Project.findOne({ _creator:id, title });
@@ -13,7 +17,7 @@ const isExistsByIdAndTitle = async (id,title) => {
 };
 
 const getProjectsSummary = async id => {
-	const data = await DB.Project.find({ _creator:id }).lean()
+	const data = await DB.Account.findOne({ id }).lean()
 	return data
 }
 
@@ -28,7 +32,10 @@ const addProject = async (id,title,body) => {
 		throw new Error.AlreadyExists();
 	}
 	
-	const newProject = new DB.Project({ _creator:id, title, body, files:'' })
+	const user = await DB.Account.findOne({ id })
+	user.projects.push({title, body})
+	await user.save()
+	const newProject = new DB.Project({ _creator:id, title, body, files:[] })
 	await newProject.save()
 	return true
 }
@@ -37,13 +44,15 @@ const setFiles = async (id,title,files) => {
 	if (!title) {
 		throw new Error.InvalidRequest()
 	}
-	
 	const project = await findByIdAndTitle(id, title)
-	project.files = JSON.stringify(files)
-	await project.save()
+	for (let file of files){
+		const paths = file.originalname.split('/')
+		project.files.push({ contentType: file.mimetype, webkitRelativePath: file.originalname, data: file.buffer, name: paths[paths.length-1]})
+		await project.save()
+	}
+
 	return true
 }
-
 
 
 router.get('/', async (req, res, next) => {
@@ -78,13 +87,13 @@ router.post('/new', async (req, res, next) => {
 	}
 });
 
-router.post('/info/:title', async (req, res, next) => {
+router.post('/info/:title', upload.array("fr2"),async (req, res, next) => {
 	try {
 		const { id } = req.session.user
 		const { title } = req.params;
-		const { files } = req.body;
+		const { files } = req;
 		const ret = await setFiles(id, title, files);
-		res.send(ret);
+		res.send(true);
 	} catch (err) {
 		next(err);
 	}

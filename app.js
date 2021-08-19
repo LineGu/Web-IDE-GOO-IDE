@@ -14,7 +14,7 @@ const initExpress = redisClient => {
 	const app = express();
 	const PORT = 3000;
 
-	app.use(bodyParser.json({limit:5000000}));
+	app.use(bodyParser.json({limit:500000000}));
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(
 		session({

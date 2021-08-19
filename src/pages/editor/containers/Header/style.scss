@@ -1,14 +1,17 @@
 .Header {
+	display: flex;
 	background-color: #2C2C2C;
+	align-items: flex-end;
 	width:100%;
 	color: #ffffff;
 	strong {
 		margin:0;
 		padding:0;
+		color: #6877F6;
 	}
 	p {
 		font-size: 3em;
-		margin: 0 0 0 1em;
+		margin: 0 0 0.2em 1em;
 		padding:0;
 	}
 	hr {
@@ -27,7 +30,7 @@
 	}
 	
 	&_path {
-		margin-left: 1vw;
+		margin-left: 30vw;
 		height: 2em;
 		text-align:center;
 	}

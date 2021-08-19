@@ -1,31 +1,30 @@
 import React from 'react';
-import useProject from '../../hooks/useProject';
 import { FcFile } from "react-icons/fc";
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
+import useEditingFile from '../../hooks/useEditingFile'
 
 import style from './style.scss'
 
 function Header () {
-	const { fileOpend } = useProject()
 	
-	
+	const { fileOnScreen } = useEditingFile()
+
 	return (
 		<div className={style.Header}>
 			<p><strong>goo</strong>ide</p>
-			<hr/>
-			{fileOpend ? 
+			{fileOnScreen ? 
 				<div className={style.Header_path}>
-					{fileOpend.path.map((dir,idx) => {
-				if(idx < fileOpend.path.length - 1) {
+					{fileOnScreen.path.map((dir,idx) => {
+				if(idx < fileOnScreen.path.length - 1) {
 					return (
 					<React.Fragment key={dir}>
 						<span><FcFolder/>{dir}</span>
 						<span className={style.Header_slash}>/</span>
 					</React.Fragment>)
 				}
-				return <span><FcFile key={dir}/>{dir}</span>
-			})}</div> : null}
-			{fileOpend ? <hr/> : null}
+				return <span key={dir}><FcFile/>{dir}</span>
+			})}</div> : <hr/>}
+			{fileOnScreen ? <hr/> : null}
 		</div>
 	)
 }

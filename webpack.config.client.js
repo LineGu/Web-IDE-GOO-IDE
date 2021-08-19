@@ -42,6 +42,10 @@ module.exports = {
 					}
 				]
 			},
+			{
+			 	test: /\.worker\.js$/,
+        		use: { loader: "worker-loader" },
+			},
 			configUtil.extractCssRule,
 			configUtil.extractNodeCssRule
 		]

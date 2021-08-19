@@ -1,70 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import FileGetter from 'components/FileGetter';
+import React from 'react';
 import useProject from '../../hooks/useProject';
-import fileManager from '../../model/manager';
-import FolderBlock from 'components/FolderBlock'
-import FileBlock from 'components/FileBlock'
-
-import style from './style.scss'
+import useEditingFile from '../../hooks/useEditingFile'
+import FolderBlock from 'components/FolderBlock';
+import FileBlock from 'components/FileBlock';
+import FileGetter from 'components/FileGetter';
+import {RiSave2Fill} from 'react-icons/ri'
+import {GiSaveArrow} from 'react-icons/gi'
+import { Spinner } from 'reactstrap'
+import style from './style.scss';
 
 const ignoreFiles = ['.git', '.DS_Store', 'node_modules'];
 
-function SideBar() {
-	const { fileState, fileOpend, setFileOpend, setProject } = useProject()
-	const initFile = fileState.data ? fileState.data.files : fileManager.files
-	const [files, setFiles] = useState(initFile);
+function SideBar({ onClickFile }) {
+  const { openFile, fileOnScreen  } = useEditingFile()
+  const { files, fileState, getSortedFilesName, setInitFiles, saveProject } = useProject()
+
+  const createFileTreeElem = (files) => {
+    return getSortedFilesName(files).map((name) => {
+      const isIgnoreFile = ignoreFiles.indexOf(name) !== -1;
+      if (isIgnoreFile) return null;
+      const file = files[name];
+      if (file.type === 'directory') {
+        const children = createFileTreeElem(file.children);
+        return (
+          <FolderBlock fileName={name} path={file.path} key={file.path.join('/')}>
+            {children}
+          </FolderBlock>
+        );
+      } else {
+        return <FileBlock fileName={name} onClick={onClickFile} path={file.path} key ={file.path.join('/')} fileOnScreen={fileOnScreen}/>;
+      }
+    });
+  };
 	
-	useEffect(() => {
-		if(fileState.data) {
-			setFiles(fileState.data.files)
-			console.log(fileState.data.files)
-			fileManager.files = fileState.data.files
-		}
-	},[fileState])
+	const getFolderFromLocal = async (event) => {
+		setInitFiles(event.target.files);
+	 };
 
-	const onClickFile = (e, path) => {
-		e.stopPropagation()
-		const file = fileManager.getFile(path)
-		setFileOpend(file)
-	}
-	
-	const createFileTree = (files) => {
-    	return fileManager.sortProject(files).map((fileKey) => {
-			const isIgnoreFile = ignoreFiles.indexOf(fileKey) !== -1
-        	if (isIgnoreFile) return null;
-			const file = files[fileKey];
-			if (file.type === 'directory') {
-			  const children = createFileTree(file.children);
-			  return (
-				<FolderBlock fileName={fileKey} path={file.path}>
-				  {children}
-				</FolderBlock>
-			  );
-			} else {
-			  return (
-				<FileBlock fileName={fileKey} onClick={onClickFile} path={file.path}/>
-			  );
-			}
-		 });
-  	};
-
-	const onChange = async (event) => {
-          fileManager.readName(event.target.files);
-          setFiles(fileManager.files);
-          await fileManager.setFiles(event.target.files);
-          setFiles(fileManager.files);
-          await fileManager.readLazyFile();
-          setFiles(fileManager.files);
-			console.log(1)
-		  await setProject(fileManager.files)  
-		console.log(2)
-    }
-
-	return (<div className={style.SideBar}>
-				<FileGetter onChange={onChange} directoryAble={true}/>
-				{files ? createFileTree(files) : null}
-			</div>)
+  return (
+    <div className={style.SideBar}>
+		<div className={style.SideBar_ControlBar}>
+			<span>
+					{fileState.loading? <Spinner size="sm" color="secondary" /> : '프로젝트'}
+			</span>
+			<GiSaveArrow />
+			<RiSave2Fill onClick = {saveProject}/>
+			<FileGetter onChange={getFolderFromLocal} directoryAble={true} />
+			<FileGetter onChange={getFolderFromLocal} directoryAble={false} />
+		</div>
+		<div className={style.SideBar_FileWrapper}>
+        	{files ? createFileTreeElem(files) : null}
+		</div>
+    </div>
+  );
 }
 
 export default SideBar;

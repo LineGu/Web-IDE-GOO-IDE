@@ -43,7 +43,7 @@ const add = async (id, pw) => {
 	}
 
 	const hashedPw = await util.genHashedPw(pw);
-	const newAccountInfo = new DB.Account({ id, pw: hashedPw });
+	const newAccountInfo = new DB.Account({ id, pw: hashedPw, projects:[] });
 
 	await newAccountInfo.save()
 	return true;

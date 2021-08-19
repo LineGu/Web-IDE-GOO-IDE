@@ -1,14 +1,27 @@
 import React from 'react';
+import { FaFolderPlus } from 'react-icons/fa'
+import { AiFillFileAdd } from 'react-icons/ai'
 
-const FileGetter = ({onChange, directoryAble = false}) => {
-	if ( directoryAble ) return <input
-									directory=""
-									webkitdirectory=""
-									type="file"
-									onChange={ onChange }
-								  />
+const FileGetter = ({ onChange, directoryAble = false }) => {
 	
-	return <input type="file" onChange={onChange} />
-}
+	const openFinder = (e) => {
+		e.stopPropagation()
+		e.currentTarget.querySelector('.finder').click()
+	}
+	
+	if (directoryAble) {
+		return (
+			<div onClick={openFinder}>
+				<FaFolderPlus/>
+				<input directory="" webkitdirectory="" type="file" onChange={onChange} style={{display:'none'}} className='finder'/>
+			</div>);
+	}
 
-export default FileGetter
+	return (
+		<div onClick={openFinder}>
+			<AiFillFileAdd/>
+			<input type="file" onChange={onChange} style={{display:'none'}} className='finder' multiple/>
+		</div>)
+};
+
+export default FileGetter;

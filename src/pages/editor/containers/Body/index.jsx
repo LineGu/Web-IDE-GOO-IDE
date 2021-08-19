@@ -1,37 +1,61 @@
-import React, { useState, useEffect } from 'react';	
-import FileEditor from 'components/FileEditor'
+import React, { useState, useEffect } from 'react';
+import FileEditor from 'components/FileEditor';
 import useProject from '../../hooks/useProject';
+import useEditingFile from '../../hooks/useEditingFile'
+import SideBar from '../SideBar';
+import FileTab from '../FileTab'
 
-import style from './style.scss'
+import style from './style.scss';
 
 function Body() {
-	const { fileState, fileOpend, setFileOpend } = useProject()
-	const [editorValue, setEditorValue] = useState('')
-	
+	const [editorValue, setEditorValue] = useState('');
+	const { openFile, fileOnScreen, SaveTemporaryFile } = useEditingFile()
+	const { files } = useProject()
+	let debouncer
+
 	useEffect(() => {
-		if(fileOpend) setEditorValue(fileOpend.content)
-	},[fileOpend])
+		if (fileOnScreen) setEditorValue(fileOnScreen.content);
+	}, [fileOnScreen]);
 	
+	const onClickFile = (e, path) => {
+		e.stopPropagation();
+		openFile(path, files);
+	};
+
 	const onChangeInput = (e) => {
-		setEditorValue(e.target.value)
-	}
-	
+		const newValue = e.currentTarget.value
+		setEditorValue(newValue);
+		if(debouncer) clearTimeout(debouncer)
+		debouncer = setTimeout(() => SaveTemporaryFile(newValue),200);
+	};
+
 	const showContent = () => {
-		if (fileOpend && fileOpend.contentType !== 'image') {
-			return <FileEditor title={fileOpend.name} content={editorValue} onChange=					{onChangeInput}/>
+		if (fileOnScreen && fileOnScreen.contentType !== 'image') {
+			return (
+				<FileEditor
+					title={fileOnScreen.name}
+					content={editorValue}
+					onChange={onChangeInput}
+				/>
+			);
 		}
-		
-		if (fileOpend && fileOpend.contentType === 'image'){
-			return <img src={editorValue} alt={fileOpend.name}/>
+
+		if (fileOnScreen && fileOnScreen.contentType === 'image') {
+			return <img src={editorValue} alt={fileOnScreen.name} />;
 		}
-		
-		return null
-	}
-	
-	return <div className={style.Body}>
+
+		return null;
+	};
+
+	return (
+		<React.Fragment>
+			<SideBar onClickFile={onClickFile} />
+			<div className={style.Body}>
+				<FileTab onClickFile={onClickFile} />
 				{showContent()}
-		   </div>
+			</div>
+		</React.Fragment>
+	);
 }
 
-export default Body
-
+export default Body;

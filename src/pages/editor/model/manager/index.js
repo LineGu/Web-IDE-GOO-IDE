@@ -1,3 +1,6 @@
+import ab2str from 'arraybuffer-to-string';
+import str2ab from 'string-to-arraybuffer'
+
 const ModelType = {
   FILE: 'file',
   DIRECTORY: 'directory',
@@ -9,128 +12,169 @@ const ContentType = {
 };
 
 class FileManager {
-	_newDirId = 0;
-  
-    _newFileId = 0;
+  _lazyFiles = [];
 
-	files = null;
+  _isInLazyDir(paths) {
+    return paths.filter((path) => this.lazyDir.indexOf(path) !== -1).length !== 0;
+  }
 
-	_lazyFiles = [];
+  _resetLazyFiles = () => (this._lazyFiles = []);
 
-	_readFile(res, file, data) {
-      const reader = new FileReader();
-      const { type, name, webkitRelativePath: path } = file;
-      let contentType;
-      if (type.includes(ContentType.TEXT)) contentType = ContentType.TEXT;
-      if (type.includes(ContentType.IMG)) contentType = ContentType.IMG;
-      reader.addEventListener('loadend', () => {
-        const id = `f_${this._newFileId}`;
-        const unitData = {
-          type: ModelType.FILE,
-          name,
-          content: reader.result,
-          id,
-          contentType,
-        };
-        this._newFileId += 1;
-  
-        const paths = file.webkitRelativePath.split('/');
-        this.createDir(paths, data, 0, unitData);
-        res('data');
-      });
-      if (contentType === ContentType.IMG) reader.readAsDataURL(file);
-      else reader.readAsText(file);
-    }
+  _readFileObj(res, file) {
+    const reader = new FileReader();
+    const { type, name, webkitRelativePath } = file;
+    let contentType;
+    if (type.includes(ContentType.TEXT)) contentType = ContentType.TEXT;
+    if (type.includes(ContentType.IMG)) contentType = ContentType.IMG;
+    const paths = webkitRelativePath ? webkitRelativePath.split('/') : [name];
 
-	readName(FileList) {
-      const data = {};
-      for (let file of FileList) {
-        this.createDir(file.webkitRelativePath.split('/'), data, 0, {});
-      }
-      this.files = { ...data };
-    }
-  
-    setFiles = async (FileList) => {
-      const data = {};
-      const promisesToRead = [];
-      for (let file of FileList) {
-        if (file.webkitRelativePath.includes('node_modules'))this._lazyFiles.push(file);
-        else promisesToRead.push(new Promise((res, rej) => this._readFile(res, file, data)));
-      }
-      await Promise.all(promisesToRead);
-      this.files = { ...data };
-    };
-  
-    readLazyFile = async () => {
-      const data = { ...this.files };
-      const promisesToRead = [];
-      for (let file of this._lazyFiles) {
-        promisesToRead.push(new Promise((res, rej) => this._readFile(res, file, data)));
-      }
-      await Promise.all(promisesToRead);
-      this._lazyFiles = [];
-      this.files = { ...data };
-    };
-  
-    createDir(paths, children, idx, unitData) {
-      if (idx === paths.length - 1) {
-        unitData.order = Object.keys(children).length;
-        unitData.path = paths;
-        children[unitData.name] = unitData;
-        return;
-      }
-      if (!children[paths[idx]]) {
-        children[paths[idx]] = {
-          type: ModelType.DIRECTORY,
-          name: paths[idx],
-          path: paths.slice(0, idx + 1),
-          id: `d_${this._newDirId}`,
-          order: Object.keys(children).length,
-          children: {},
-        };
-        this._newDirId += 1;
-      }
-      this.createDir(paths, children[paths[idx]].children, idx + 1, unitData);
-    }
+    reader.addEventListener('loadend', () => {
+      this.saveFile(ModelType.FILE, name, reader.result, contentType, type, paths);
+	  res()
+    });
 
-	sortProject (files) {
-		const names = Object.keys(files)
-		names.sort(function (a, b) {
-        const fileA = files[a];
-        const fileB = files[b];
-        if (fileA.type === 'directory' && fileB.type === 'directory' && a.toUpperCase() <= b.toUpperCase()) {
-          return -1;
-        }
-        if (fileA.type === 'directory' && fileB.type === 'directory' && a.toUpperCase() > b.toUpperCase()) {
-          return 1;
-        }
-        if (fileA.type === 'file' && fileB.type === 'file' && a.toUpperCase() > b.toUpperCase()) {
-          return 1;
-        }
-        if (fileA.type === 'file' && fileB.type === 'file' && a.toUpperCase() <= b.toUpperCase()) {
-          return -1;
-        }
-        if (fileA.type === 'directory' && fileB.type === 'file') {
-          return -1;
-        }
-        if (fileA.type === 'file' && fileB.type === 'directory') {
-          return 1;
-        }
-        return -1;
-      })
-		
-	  return names
+    if (contentType === ContentType.IMG) reader.readAsDataURL(file);
+    else if (contentType === ContentType.TEXT) reader.readAsText(file);
+	else {
+		this.saveFile(ModelType.FILE, name, '', 'text', type, paths);
+		res()
 	}
+  }
 
-	getFile(path) {
-		let currentDir = this.files
-		for (let dir of path){
-			console.log(currentDir)
-			currentDir = currentDir[dir].children ? currentDir[dir].children : currentDir[dir]
+  _createDir(paths, children, idx, unitData) {
+    const isLastPath = idx === paths.length - 1;
+    const currentDir = paths[idx];
+    if (isLastPath) children[unitData.name] = unitData;
+    if (!isLastPath && !children[currentDir]) {
+      children[currentDir] = this._createDirData(ModelType.DIRECTORY, currentDir, paths.slice(0, idx + 1), {});
+    }
+    if (!isLastPath) this._createDir(paths, children[currentDir].children, idx + 1, unitData);
+  }
+
+  _createDirData(type, name, path, children) {
+    return { type, name, path, children };
+  }
+
+  backgroundFiles = {};
+
+  rawFiles = null;
+
+  lazyDir = ['node_modules', 'dist'];
+
+  saveFile(type, name, content, contentType, mimeType, paths) {
+    const unitData = { type, name, content, contentType, mimeType, path: paths };
+    this.backgroundFiles[paths.join('/')] = unitData;
+  }
+
+  createFileTree(FileList) {
+    const data = {};
+	for (let key of Object.keys(this.backgroundFiles)) {
+	  const file = this.backgroundFiles[key]
+      const { name, path:paths } = file;
+      const unitTreeData = { type: ModelType.FILE, name, path: paths };
+      this._createDir(paths, data, 0, unitTreeData);		
+	}
+	if (!FileList) return data
+    for (let file of FileList) {
+      const { name, webkitRelativePath } = file;
+      const paths = webkitRelativePath ? webkitRelativePath.split('/') : [name];
+      const unitTreeData = { type: ModelType.FILE, name, path: paths };
+      this._createDir(paths, data, 0, unitTreeData);
+    }
+    return data;
+  }
+
+  readAllFiles = async (FileList) => {
+    const promisesToRead = [];
+    for (let file of FileList) {
+	  const { name, webkitRelativePath } = file;
+	  const paths = webkitRelativePath ? webkitRelativePath.split('/') : [name];
+      if (this._isInLazyDir(paths)) this._lazyFiles.push(file);
+      else promisesToRead.push(new Promise((res, rej) => this._readFileObj(res, file)));
+    }
+    await Promise.all(promisesToRead);
+  };
+
+  readLazyFile = async () => {
+    const promisesToRead = [];
+    for (let file of this._lazyFiles) {
+      promisesToRead.push(new Promise((res, rej) => this._readFileObj(res, file)));
+    }
+    await Promise.all(promisesToRead);
+    this._resetLazyFiles();
+  };
+
+  sortProject(files) {
+    const names = Object.keys(files);
+    const isFile = (file) => file.type === 'file';
+    names.sort(function (a, b) {
+      const fileA = files[a];
+      const fileB = files[b];
+      if (!isFile(fileA) && !isFile(fileB) && a.toUpperCase() <= b.toUpperCase()) return -1;
+
+      if (!isFile(fileA) && !isFile(fileB) && a.toUpperCase() > b.toUpperCase()) return 1;
+
+      if (isFile(fileA) && isFile(fileB) && a.toUpperCase() > b.toUpperCase()) return 1;
+
+      if (isFile(fileA) && isFile(fileB) && a.toUpperCase() <= b.toUpperCase()) return -1;
+
+      if (!isFile(fileA) && isFile(fileB)) return -1;
+
+      if (isFile(fileA) && !isFile(fileB)) return 1;
+
+      return -1;
+    });
+    return names;
+  }
+
+  getFileByPath = (path) => this.backgroundFiles[path];
+
+  arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
+
+	readDBFile(files) {
+		for (let file of files) {
+		  const { name, webkitRelativePath } = file;
+		  const paths = webkitRelativePath ? webkitRelativePath.split('/') : [name];
+		  let content = '';
+		  let contentType = file.contentType;
+		  if (file.contentType.includes('image')) {
+			content = 'data:' + contentType + ';base64,' + this.arrayBufferToBase64(file.data.data);
+			contentType = 'image';
+		  }
+		  if (file.contentType.includes('text')) {
+			content = ab2str(file.data.data, 'utf-8');
+			contentType = 'text';
+		  }
+		  this.saveFile('file', paths[paths.length - 1], content, contentType, file.contentType, paths);
+    }
+  }
+
+	createFileObj() {
+		const files = this.backgroundFiles
+		const FileList = []
+		for (let key of Object.keys(files)) {
+			const {mimeType, content, path, name} = files[key]
+			const option = {
+				type:mimeType
+			}
+			if(mimeType.includes('image')) {
+				const file = new File([str2ab(content)],path.join('/'),option)
+				FileList.push(file)
+				continue
+			}
+			const file = new File([content],path.join('/'),option)
+			FileList.push(file)
 		}
-		console.log(currentDir)
-		return currentDir
-	} 
+		return FileList
+	}
 }
 
 export default new FileManager();

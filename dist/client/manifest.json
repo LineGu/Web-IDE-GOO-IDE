@@ -4,5 +4,6 @@
   "EditorApp.css": "/EditorApp.css",
   "EditorApp.js": "/EditorApp.js",
   "WorkspaceApp.css": "/WorkspaceApp.css",
-  "WorkspaceApp.js": "/WorkspaceApp.js"
+  "WorkspaceApp.js": "/WorkspaceApp.js",
+  "file.worker.worker.js": "/file.worker.worker.js"
 }

@@ -1,17 +1,137 @@
 .style__Folder__2vcQKo {
-  list-style: none; }
+  background-color: #232323;
+  list-style: none;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  width: 100%; }
+  .style__Folder__2vcQKo ul {
+    margin: 0px;
+    padding: 0px; }
+    .style__Folder__2vcQKo ul li {
+      margin: 0px;
+      padding: 0px; }
+  .style__Folder__2vcQKo svg {
+    margin: 0 0.3em 0 0em; }
+  .style__Folder__2vcQKo:hover {
+    cursor: pointer; }
 
 .style__File__3X4700 {
-  list-style: none; }
+  background-color: #232323;
+  font-size: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  width: 100%; }
+  .style__File__3X4700 svg {
+    margin-right: 0.2em; }
+  .style__File__3X4700:hover {
+    cursor: pointer; }
 
 .style__SideBar__hoAxp8 {
-  background-color: #2C2C2C;
+  min-width: 16vw;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   height: 100%;
   color: #ffffff;
-  overflow: hidden; }
+  overflow: hidden;
+  background-color: #232323; }
+  .style__SideBar_ControlBar__1wuSl9 {
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    -ms-flex-pack: end;
+        justify-content: flex-end;
+    -ms-flex-align: center;
+        align-items: center;
+    width: 100%;
+    height: 2em;
+    border: 1px solid #181A1F;
+    background-color: #2C2C2C;
+    color: #6877F6; }
+    .style__SideBar_ControlBar__1wuSl9 span {
+      position: absolute;
+      left: 1em;
+      top: 0.4em;
+      font-size: 0.8em;
+      color: #555558; }
+    .style__SideBar_ControlBar__1wuSl9 * {
+      margin-right: 5px;
+      margin-bottom: 2px; }
+    .style__SideBar_ControlBar__1wuSl9 *:nth-child(2) {
+      margin-right: 7px; }
+    .style__SideBar_ControlBar__1wuSl9 *:nth-child(3) {
+      margin-right: 11px; }
+    .style__SideBar_ControlBar__1wuSl9 svg:hover {
+      cursor: pointer;
+      opacity: 60%; }
+
+.style__DropHelper__YOSOiu {
+  position: absolute;
+  opacity: 0%;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 100%; }
+  .style__DropHelper_left__-kzvZJ {
+    width: 50%;
+    height: 100%; }
+  .style__DropHelper_right__3qZ4pP {
+    width: 50%;
+    height: 100%; }
+
+.style__NavBar__3psQu0 {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  background-color: inherit;
+  color: #ffffff;
+  font-size: 14px;
+  height: 2em; }
+  .style__NavBar_Item__2Y4HnJ {
+    padding: 2px 4px 0 4px;
+    position: relative;
+    width: 8rem;
+    text-align: center;
+    background-color: #383838;
+    margin: 1px 1px 0 1px;
+    opacity: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis; }
+  .style__NavBar_OpenItem__12DaLg {
+    padding: 2px 4px 0 4px;
+    position: relative;
+    width: 8rem;
+    text-align: center;
+    border: 2px solid #6D9AE3;
+    border-bottom: none;
+    margin: 0 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis; }
+  .style__NavBar_Item__2Y4HnJ:hover, .style__NavBar_OpenItem__12DaLg:hover {
+    cursor: pointer; }
 
 .style__Body__1CPfyc {
   background-color: #1F1E1E;
@@ -32,17 +152,27 @@
             box-shadow: none !important;
     background-color: #1F1E1E;
     color: #ffffff; }
+  .style__Body__1CPfyc img {
+    max-width: 96%;
+    max-height: 96vh; }
+  .style__Body__1CPfyc label {
+    color: #ffffff; }
 
 .style__Header__3HstVl {
+  display: -ms-flexbox;
+  display: flex;
   background-color: #2C2C2C;
+  -ms-flex-align: end;
+      align-items: flex-end;
   width: 100%;
   color: #ffffff; }
   .style__Header__3HstVl strong {
     margin: 0;
-    padding: 0; }
+    padding: 0;
+    color: #6877F6; }
   .style__Header__3HstVl p {
     font-size: 3em;
-    margin: 0 0 0 1em;
+    margin: 0 0 0.2em 1em;
     padding: 0; }
   .style__Header__3HstVl hr {
     height: 2px;
@@ -54,7 +184,7 @@
   .style__Header__3HstVl svg {
     margin-right: 0.4em; }
   .style__Header_path__2HT1Q8 {
-    margin-left: 1vw;
+    margin-left: 30vw;
     height: 2em;
     text-align: center; }
 
