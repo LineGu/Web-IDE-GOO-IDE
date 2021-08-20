@@ -28,7 +28,7 @@ function SideBar({ onClickFile }) {
           </FolderBlock>
         );
       } else {
-        return <FileBlock fileName={name} onClick={onClickFile} path={file.path} key ={file.path.join('/')} fileOnScreen={fileOnScreen}/>;
+        return <FileBlock fileName={name} onClick={onClickFile} id={file.id} key ={file.path.join('/')} fileOnScreen={fileOnScreen} path={file.path}/>;
       }
     });
   };

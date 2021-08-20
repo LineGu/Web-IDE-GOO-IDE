@@ -149,6 +149,7 @@ class FileManager {
 			content = 'data:' + contentType + ';base64,' + this.arrayBufferToBase64(file.data.data);
 			contentType = 'image';
 		  }
+			console.log(1)
 		  if (file.contentType.includes('text')) {
 			content = ab2str(file.data.data, 'utf-8');
 			contentType = 'text';
@@ -165,12 +166,14 @@ class FileManager {
 			const option = {
 				type:mimeType
 			}
-			if(mimeType.includes('image')) {
-				const file = new File([str2ab(content)],path.join('/'),option)
-				FileList.push(file)
-				continue
-			}
-			const file = new File([content],path.join('/'),option)
+			// if(mimeType.includes('image')) {
+			// 	const file = new File([str2ab(content)],path.join('/'),option)
+			// 	file.id = '1234'
+			// 	FileList.push(file)
+			// 	continue
+			// }
+			const file = new File([content],path.join('/')+'1234',option)
+			file.id = '1234'
 			FileList.push(file)
 		}
 		return FileList

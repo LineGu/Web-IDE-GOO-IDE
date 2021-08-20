@@ -1,7 +1,8 @@
 import React, { createContext, useReducer, useEffect, useState } from 'react';
 import axios from 'axios';
 import { reducer, createDispatcher, initState } from './reducer';
-import fileManager from '../manager';
+import fileManager from './managers/FileManager';
+import { v4 as createId } from 'uuid';
 
 import Worker from './file.worker.js';
 
@@ -18,7 +19,7 @@ function ProjectProvider({ title, children }) {
       const { data } = await axios.get(`/api/project/info/${title}`);
       const fileTree = fileManager.createFileTree(data.files);
       setFiles(fileTree);
-	  fileManager.readDBFile(data.files)
+	  readFilesBackground(data.files,'db')
 	  dispatcher.success();
     } catch (err) {
       console.log(err);
@@ -29,17 +30,8 @@ function ProjectProvider({ title, children }) {
   const saveProject = async () => {
     try {
       dispatcher.loading();
-      const worker = new Worker();
-      const fileList = fileManager.createFileObj();
-      worker.postMessage({ files: fileList, title, msg: 'save' });
-      worker.onmessage = (e) => {
-        if (e.data.msg === 'SUCCESS') {
-          dispatcher.success();
-        } else {
-          dispatcher.error(e.data.msg);
-        }
-        worker.terminate();
-      };
+      fileManager.saveFile(title)
+	  dispatcher.success()
     } catch (err) {
       console.log(err);
       dispatcher.error(err);
@@ -47,23 +39,31 @@ function ProjectProvider({ title, children }) {
   };
 
   const setInitFiles = (files) => {
-    const fileTree = fileManager.createFileTree(files);
+	const updatedFiles = setId(files)
+    const fileTree = fileManager.createFileTree(updatedFiles);
     setFiles(fileTree);
-    readFilesBackground(files);
+    readFilesBackground(updatedFiles,'local');
   };
+	
+  const setId = (files) => {
+  	for (let file of files) {
+		file.id = createId()
+	}
+	return files
+  }
 
-  const readFilesBackground = (files) => {
-    fileManager.rawFiles = files;
+  const readFilesBackground = (files,type) => {
     const worker = new Worker();
-    setTimeout(() => worker.postMessage({ files, title, msg: 'read' }), 0);
-    worker.onmessage = (e) => {
-      if(e.data.files) fileManager.backgroundFiles = {...fileManager.backgroundFiles, ...e.data.files};
-	  if(e.data.msg === 'SUCCESS') worker.terminate();
+	fileManager.readFileBackGround(worker,files,title,type)
+	worker.onmessage = (e) => {
+      const { msg, files: BGFiles } = e.data;
+      if (BGFiles) fileManager.synchronizeBGFiles(BGFiles);
+      if (msg === 'SUCCESS') worker.terminate();
     };
   };
 
   const getSortedFilesName = (files) => {
-    return fileManager.sortProject(files);
+    return fileManager.getFileNamesSorted(files);
   };
 	
   const moveFile = (draggedFile, targetDir ) => {

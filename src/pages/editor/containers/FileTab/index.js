@@ -1,83 +1,76 @@
 import React from 'react';
 import useEditingFile from '../../hooks/useEditingFile';
-import useProject from '../../hooks/useProject';
+import dragAPI from '../../utils/dragAPI'
 
 import style from './style.scss';
 
 const FileTab = ({ onClickFile }) => {
-  const { openFile, fileOnScreen, editingFiles, setEditingFiles } = useEditingFile();
-  const { files } = useProject();
+  const { fileOnScreen, editingFiles, setEditingFiles } = useEditingFile();
   const navBarNode = React.useRef(null);
-  const dragData = React.useRef({ dragIdx: null, originStyle:null });
+  const dragData = React.useRef({ dragIdx: null, originStyle: null });
 
   React.useEffect(() => {
     navBarNode.current = document.querySelector('#navBar');
   }, [editingFiles]);
-	
+
   React.useEffect(() => {
-	document.addEventListener('drop',onDrop)
-	document.addEventListener('dragover',onDragOver)
-	return () => {
-		document.removeEventListener('drop',onDrop)
-		document.removeEventListener('dragover',onDragOver)
-	}
-  },[])
+    document.addEventListener('drop', onDrop);
+    document.addEventListener('dragover', onDragOver);
+    return () => {
+      document.removeEventListener('drop', onDrop);
+      document.removeEventListener('dragover', onDragOver);
+    };
+  }, []);
+	
+  const getNavChildNodes = () => {
+	  return navBarNode.current.childNodes;
+  }
 
   const onDragStart = (e) => {
-	const navChildNodes = navBarNode.current.childNodes;
-	let dragIdx = 0
-	 for (let node of navChildNodes){
-		 if(node.id === e.target.id) {
-			 break
-		 }
-		 dragIdx ++
-	 }
-    dragData.current = { dragIdx, originStyle: {...navChildNodes[dragIdx].style} };
-    e.currentTarget.querySelector('div').style.visibility = 'hidden';
+    const navChildNodes = getNavChildNodes();
+    const originStyle = e.currentTarget.style;
+    const dragIdx = dragAPI.findElemIdx(e.target.id, navChildNodes);
+    dragData.current = { dragIdx, originStyle };
+    dragAPI.hideElem(e.currentTarget.querySelector('div'));
   };
 
   const onDragEnd = (e) => {
-	e.currentTarget.style = dragData.current.originStyle;
-    e.currentTarget.querySelector('div').style = 'visible'
+    e.currentTarget.style = dragData.current.originStyle;
+	dragAPI.showElem(e.currentTarget.querySelector('div'));
+  };
+
+  const findDropElemIdx = (e) => {
+    const dropElemId = e.currentTarget.parentElement.parentElement.id;
+    const navChildNodes = getNavChildNodes();
+    return dragAPI.findElemIdx(dropElemId, navChildNodes);
   };
 
   const onDragEnterLeft = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    dragAPI.preventEvent(e);
     const { dragIdx } = dragData.current;
-    const currentId = e.currentTarget.parentElement.parentElement.id
-    const navChildNodes = navBarNode.current.childNodes;
-	let dropIdx = 0
-	 for (let node of navChildNodes){
-		 if(node.id === currentId) {
-			 break
-		 }
-		 dropIdx ++
-	 }
-	navChildNodes[dragIdx].style.backgroundColor = '#6877F6'
-	navChildNodes[dragIdx].style.opacity = '60%'
-	if(dragIdx + 1 === dropIdx) return
+    const dropIdx = findDropElemIdx(e);
+    const isSamePosition = dragIdx + 1 === dropIdx;
+    if (isSamePosition) return;
+	  
+	const navChildNodes = getNavChildNodes();
+    dragAPI.createGhostElem(navChildNodes[dragIdx]);
+
     navBarNode.current.insertBefore(navChildNodes[dragIdx], navChildNodes[dropIdx]);
     dragData.current.dragIdx = dragIdx < dropIdx ? dropIdx - 1 : dropIdx;
   };
 
   const onDragEnterRight = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    dragAPI.preventEvent(e);
     const { dragIdx } = dragData.current;
-    const currentId = e.currentTarget.parentElement.parentElement.id
-    const navChildNodes = navBarNode.current.childNodes;
-	let dropIdx = 0
-	 for (let node of navChildNodes){
-		 if(node.id === currentId) {
-			 break
-		 }
-		 dropIdx ++
-	 }
-	 navChildNodes[dragIdx].style.backgroundColor = '#6877F6'
-	 navChildNodes[dragIdx].style.opacity = '40%'
-	if (dropIdx + 1 === dragIdx) return
-    if (navChildNodes.length - 1 === dropIdx) {
+    const dropIdx = findDropElemIdx(e);
+    const isSamePosition = dropIdx + 1 === dragIdx;
+    if (isSamePosition) return;
+	  
+	const navChildNodes = getNavChildNodes();
+    dragAPI.createGhostElem(navChildNodes[dragIdx]);
+    const isLastPosition = navChildNodes.length - 1 === dropIdx;
+
+    if (isLastPosition) {
       navBarNode.current.append(navChildNodes[dragIdx]);
       dragData.current.dragIdx = dropIdx;
     } else {
@@ -87,41 +80,42 @@ const FileTab = ({ onClickFile }) => {
   };
 
   const onDragLeaveLeft = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    dragAPI.preventEvent(e);
   };
 
   const onDragLeaveRight = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    dragAPI.preventEvent(e);
   };
-	
-  const onDrop = (e) => {
-		e.preventDefault();
-		e.stopPropagation();
-	  const newEditingFiles = []
-	  const navChildNodes = navBarNode.current.childNodes;
-	  for (let node of navChildNodes){
-		  newEditingFiles.push(node.id)
-	  }
-	  setEditingFiles(newEditingFiles)
-  }
-  
-  const onDragOver = (e) => e.preventDefault()
 
-  const createTabItem = (file) => {
-    const path = file.split('/');
-    const name = path[path.length - 1];
-    const isOpenFile = fileOnScreen.path.join('/') === file;
+  const onDrop = (e) => {
+    dragAPI.preventEvent(e);
+	if (!editingFiles.length) return;
+    const idNameMap = editingFiles.reduce((acc, file) => {
+      acc[file.id] = file.name;
+      return acc;
+    }, {}); //findNameById
+    const newEditingFiles = [];
+    const navChildNodes = getNavChildNodes();
+    for (let node of navChildNodes) {
+      const id = node.id;
+      newEditingFiles.push({ id, name: idNameMap[id] });
+    }
+    setEditingFiles(newEditingFiles);
+  };
+
+  const onDragOver = (e) => dragAPI.preventEvent(e);
+
+  const createTabItem = (fileId, name) => {
+    const isOpenFile = fileOnScreen.id === fileId;
 
     if (isOpenFile)
       return (
         <div
           className={style.NavBar_OpenItem}
           draggable
-          key={file}
+          key={fileId}
           onDragStart={onDragStart}
-          id={file}
+          id={fileId}
           onDragEnd={onDragEnd}
         >
           <div className={style.DropHelper}>
@@ -134,11 +128,11 @@ const FileTab = ({ onClickFile }) => {
     return (
       <div
         className={style.NavBar_Item}
-        onClick={(e) => onClickFile(e, path)}
+        onClick={(e) => onClickFile(e, fileId)}
         draggable
-        key={file}
+        key={fileId}
         onDragStart={onDragStart}
-        id={file}
+        id={fileId}
         onDragEnd={onDragEnd}
       >
         <div className={style.DropHelper}>
@@ -152,7 +146,7 @@ const FileTab = ({ onClickFile }) => {
 
   return (
     <div className={style.NavBar} id="navBar" onDrop={onDrop}>
-      {editingFiles.map((file) => createTabItem(file))}
+      {editingFiles ? editingFiles.map((file) => createTabItem(file.id, file.name)) : null}
     </div>
   );
 };

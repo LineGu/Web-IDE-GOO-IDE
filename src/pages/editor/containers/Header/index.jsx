@@ -14,7 +14,7 @@ function Header () {
 			<p><strong>goo</strong>ide</p>
 			{fileOnScreen ? 
 				<div className={style.Header_path}>
-					{fileOnScreen.path.map((dir,idx) => {
+					{fileOnScreen.path.split('/').map((dir,idx) => {
 				if(idx < fileOnScreen.path.length - 1) {
 					return (
 					<React.Fragment key={dir}>

@@ -17,9 +17,9 @@ function Body() {
 		if (fileOnScreen) setEditorValue(fileOnScreen.content);
 	}, [fileOnScreen]);
 	
-	const onClickFile = (e, path) => {
+	const onClickFile = (e, id) => {
 		e.stopPropagation();
-		openFile(path, files);
+		openFile(id);
 	};
 
 	const onChangeInput = (e) => {

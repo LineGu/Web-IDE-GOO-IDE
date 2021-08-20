@@ -4,7 +4,7 @@ import useProject from '../../pages/editor/hooks/useProject'
 
 import style from './style.scss';
 
-const FileBlock = ({ fileName, onClick, path, fileOnScreen }) => {
+const FileBlock = ({ fileName, onClick, id, path, fileOnScreen }) => {
 	useProject()
 	const depth = path.length;
 
@@ -23,11 +23,11 @@ const FileBlock = ({ fileName, onClick, path, fileOnScreen }) => {
 		e.dataTransfer.setData('type', 'file')
 	}
 
-	const isFocusFile = fileOnScreen && fileOnScreen.path.join('') === path.join('');
+	const isFocusFile = fileOnScreen && fileOnScreen.id === id;
 
 	if (isFocusFile){
 		return (
-			<li onClick={(e) => e.stopPropagation()} className={style.File} style={{ backgroundColor: '#434C5E' }} draggable id={path.join('/')} onDragStart={onDragStart} >
+			<li onClick={(e) => e.stopPropagation()} className={style.File} style={{ backgroundColor: '#434C5E' }} draggable id={id} onDragStart={onDragStart} >
 				<FcFile style={{ marginLeft: `${depth * 1.2}em` }} />
 				{fileName}
 			</li>
@@ -36,12 +36,12 @@ const FileBlock = ({ fileName, onClick, path, fileOnScreen }) => {
 
 	return (
 		<li draggable
-			onClick={(e) => onClick(e, path)}
+			onClick={(e) => onClick(e, id)}
 			className={style.File}
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			style={{ backgroundColor: '#232323' }}
-			id={path.join('/')}
+			id={id}
 			onDragStart={onDragStart}
 		>
 			<FcFile style={{ marginLeft: `${depth * 1.2}em` }} />

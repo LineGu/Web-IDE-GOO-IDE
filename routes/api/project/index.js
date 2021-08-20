@@ -48,6 +48,7 @@ const setFiles = async (id,title,files) => {
 	for (let file of files){
 		const paths = file.originalname.split('/')
 		project.files.push({ contentType: file.mimetype, webkitRelativePath: file.originalname, data: file.buffer, name: paths[paths.length-1]})
+		console.log(file)
 		await project.save()
 	}
 

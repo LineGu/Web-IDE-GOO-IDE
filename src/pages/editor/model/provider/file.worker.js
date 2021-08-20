@@ -1,15 +1,15 @@
-import fileManager from '../manager';
+import BGFileManager from './managers/BGFileManager';
 import axios from 'axios';
 
 self.onmessage = async function (e) {
   try {
     switch (e.data.msg) {
-      case 'read':
-        await readFile(e.data.files);
+      case 'local':
+        await readLocalFiles(e.data.files, e.data.idList);
 		break
 
-      case 'save':
-        await saveFile(e.data);
+      case 'db':
+        await readDBFiles(e.data.files);
 		break
 
       default:
@@ -20,19 +20,18 @@ self.onmessage = async function (e) {
   }
 };
 
-const readFile = async (files) => {
-  await fileManager.readAllFiles(files);
-  self.postMessage({ files: fileManager.backgroundFiles });
-  await fileManager.readLazyFile();
-  self.postMessage({ files: fileManager.backgroundFiles });
+const readLocalFiles = async (files, idList) => {
+  for (let file of files) {
+	  const { webkitRelativePath } = file
+	  const id = idList[webkitRelativePath]
+	  file.id = id
+  }
+
+  const BGFiles = await BGFileManager.readLocalFiles(files);
+  self.postMessage({ files: BGFiles, msg:'SUCCESS' });
 };
 
-const saveFile = async (data) => {
-  const { title, files } = data;
-  const frm = new FormData();
-  for (let file of files) {
-    frm.append('fr2', file);
-  }
-  await axios.post(`/api/project/info/${title}`, frm, { headers: { 'Content-Type': 'multipart/form-data' } });
-  self.postMessage({ msg: 'SUCCESS' });
+const readDBFiles = async (files) => {
+  const BGFiles = await BGFileManager.readDBFiles(files);
+  self.postMessage({ files: BGFiles, msg:'SUCCESS' }); 
 };
