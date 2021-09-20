@@ -22,10 +22,18 @@
     cursor: pointer; }
 
 .style__Card__3I8XZ3 {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
   -ms-flex: 0 0 auto;
       flex: 0 0 auto;
   width: 20rem;
-  height: 15vh; }
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 12em; }
 
 .style__CardGroup__wxKejz {
   display: -ms-flexbox;

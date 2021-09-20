@@ -15,12 +15,26 @@
 }
 
 .NavBar {
+	position: relative;
 	display : flex;
 	flex-direction: row;
 	background-color: inherit;
 	color : #ffffff;
 	font-size: 14px;
+	width: 84vw;
 	height: 2em;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	svg {
+		position: absolute;
+		right:0;
+	}
+	
+	svg:hover {
+		cursor:pointer;
+		opacity: 60%;
+	}
+	
 	&_Item {
 		padding: 2px 4px 0 4px;
 		position:relative;

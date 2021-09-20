@@ -1,11 +1,12 @@
 import React from 'react';
 import useEditingFile from '../../hooks/useEditingFile';
 import dragAPI from '../../utils/dragAPI'
+import { RiCloseFill } from 'react-icons/ri'
 
 import style from './style.scss';
 
 const FileTab = ({ onClickFile }) => {
-  const { fileOnScreen, editingFiles, setEditingFiles } = useEditingFile();
+  const { fileOnScreen, editingFiles, setEditingFiles, closeFile } = useEditingFile();
   const navBarNode = React.useRef(null);
   const dragData = React.useRef({ dragIdx: null, originStyle: null });
 
@@ -123,6 +124,10 @@ const FileTab = ({ onClickFile }) => {
             <div className={style.DropHelper_right} onDragEnter={onDragEnterRight} onDragLeave={onDragLeaveRight}></div>
           </div>
           {name}
+		  <RiCloseFill onClick={(e) => {
+					e.stopPropagation()
+					closeFile(fileId)
+				}}/>
         </div>
       );
     return (
@@ -140,13 +145,17 @@ const FileTab = ({ onClickFile }) => {
           <div className={style.DropHelper_right} onDragEnter={onDragEnterRight} onDragLeave={onDragLeaveRight}></div>
         </div>
         {name}
+		<RiCloseFill onClick={(e) => {
+					e.stopPropagation()
+					closeFile(fileId)
+				}}/>
       </div>
     );
   };
 
   return (
     <div className={style.NavBar} id="navBar" onDrop={onDrop}>
-      {editingFiles ? editingFiles.map((file) => createTabItem(file.id, file.name)) : null}
+      {editingFiles && fileOnScreen ? editingFiles.map((file) => createTabItem(file.id, file.name)) : null}
     </div>
   );
 };

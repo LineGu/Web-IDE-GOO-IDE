@@ -20,7 +20,7 @@ const FileGetter = ({ onChange, directoryAble = false }) => {
 	return (
 		<div onClick={openFinder}>
 			<AiFillFileAdd/>
-			<input type="file" onChange={onChange} style={{display:'none'}} className='finder' multiple/>
+			<input type="file" onChange={onChange} style={{display:'none'}} className='finder'/>
 		</div>)
 };
 

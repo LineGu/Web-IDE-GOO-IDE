@@ -1,10 +1,10 @@
 const ExtendableError = require('./ExtendableError');
 
-class AlreadyExists extends ExtendableError {
+class AlreadyExistsNickName extends ExtendableError {
 	constructor(message) {
 		super(message || 'AlreadyExists');
-		this.code = 419;
+		this.code = 420;
 	}
 }
 
-module.exports = AlreadyExists;
+module.exports = AlreadyExistsNickName;

@@ -17,6 +17,9 @@ const getErrorMsg = errCode => {
 		case 419:
 			errorMsg = '이미 존재하는 아이디입니다.';
 			break;
+		case 420:
+			errorMsg = '이미 존재하는 닉네임입니다';
+			break;
 		default:
 			errorMsg = '잠시 후 다시 시도해주시기랍니다.';
 			break;
@@ -32,6 +35,8 @@ class Signup extends React.Component {
 			id: '',
 			pw: '',
 			repw: '',
+			name: '',
+			nickname: '',
 			errorMsg: ''
 		};
 	}
@@ -48,13 +53,23 @@ class Signup extends React.Component {
 		this.setState({ repw: e.currentTarget.value });
 	};
 
+	onChangeName = e => {
+		this.setState({ name: e.currentTarget.value });
+	};
+
+	onChangeNickName = e => {
+		this.setState({ nickname: e.currentTarget.value });
+	};
+
 	signUp = () => {
-		const { id, pw, repw } = this.state;
+		const { id, pw, name, nickname, repw } = this.state;
 		if (pw === repw) {
 			axios
 				.post('/api/account/signup', {
 					id,
-					pw
+					pw,
+					name,
+					nickname
 				})
 				.then(({ data }) => {
 					window.location.href = '/signin';
@@ -68,7 +83,7 @@ class Signup extends React.Component {
 	};
 
 	render() {
-		const { id, pw, repw, errorMsg } = this.state;
+		const { id, pw, repw, name, nickname, errorMsg } = this.state;
 		return (
 			<CenterLayout>
 				<div className={style.Signup}>
@@ -84,6 +99,16 @@ class Signup extends React.Component {
 						placeholder="비밀번호 확인"
 						value={repw}
 					/>
+					<Input
+						onChange={this.onChangeName}
+						placeholder="이름"
+						value={name}
+					/>
+					<Input
+						onChange={this.onChangeNickName}
+						placeholder="닉네임"
+						value={nickname}
+					/>	
 					{errorMsg && <FormText>{errorMsg}</FormText>}
 					<AccountButtonGroup
 						buttonLabel="회원가입"

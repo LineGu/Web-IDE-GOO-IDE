@@ -4,6 +4,7 @@ import axios from 'axios';
 import Card from '../../../../components/Card';
 import ModalToAddProject from '../../../../components/ModalToAddProject';
 import { GoPlus } from 'react-icons/go';
+import { v4 as uuidv4 } from 'uuid';
 
 import style from './style.scss';
 
@@ -40,7 +41,7 @@ class Body extends React.Component {
   getProjects = () => {
     axios
       .get('/api/project')
-      .then(({ data }) => this.setState({ projects: data.projects }))
+      .then(({ data }) => this.setState({ projects: data.projects ? data.projects : [] }))
       .catch((err) => {
         // this.setState({ errorMsg: getErrorMsg(err.response.status) });
       });
@@ -48,9 +49,10 @@ class Body extends React.Component {
 
   addProject = () => {
     const { newProjectTitle: title, newProjectBody: body } = this.state.assetsOfModal;
-	this.setState({ projects:[...this.state.projects, { title, body }], assetsOfModal: {visible:false, newProjectTitle:'', newProjectBody:''} })
+	const projectId = uuidv4()
+	this.setState({ projects:[...this.state.projects, { title, body, id:projectId }], assetsOfModal: {visible:false, newProjectTitle:'', newProjectBody:''} })
     axios
-      .post('/api/project/new', { title, body })
+      .post('/api/project/new', { title, body, projectId })
       .catch((err) => {
         // this.setState({ errorMsg: getErrorMsg(err.response.status) });
       });
@@ -63,16 +65,16 @@ class Body extends React.Component {
 
     return (
       <div className={style.CardGroup}>
-        {projects.map((project) => (
+        {projects ? projects.map((project) => (
           <Card
             title={project.title}
             description={project.body}
             btnLabel={'프로젝트 열기'}
-            key={project.title}
+            key={project.id}
             className={style.CardGroup__card}
-            linkTo={`/editor/${project.title}`}
+            linkTo={`/editor/${project.title}/${project.id}`}
           />
-        ))}
+        )) : null}
         <Card className={style.plusBtn}>{<GoPlus onClick={toggleModal} />}</Card>
         <ModalToAddProject assetsOfModal={{toggleModal, onChangeTitle, onChangeBody, addProject, ...assetsOfModal}} />
       </div>

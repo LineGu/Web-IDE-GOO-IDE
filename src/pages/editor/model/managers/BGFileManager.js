@@ -16,6 +16,10 @@ class BGFileManager {
   _errorFileIds = [];
 
   _readFileObj(res, rej, file) {
+	if (file.type === 'zip') {
+		this._readZipFile(res, rej, file)
+		return
+	}
     const reader = new FileReader();
     const { type, id, webkitRelativePath, name } = file;
     const path = webkitRelativePath ? webkitRelativePath : name;
@@ -36,6 +40,11 @@ class BGFileManager {
     else reader.readAsText(file);
   }
 
+  async _readZipFile(res,rej,file) {
+	  console.log(file)
+	  await file.async('')
+  }
+
   _saveFile(content, contentType, mimeType, id, path) {
 	const paths = path.split('/')
 	const depth = paths.length
@@ -44,26 +53,11 @@ class BGFileManager {
     this._BGFiles[id] = unitData;
   }
 
-  _arrayBufferToDataUrl(buffer) {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return 'data:' + contentType + ';base64,' + window.btoa(binary);
-  }
-
   _readArrayBufferFile(file) {
-    const { id, type, data, path } = file;
-    if (type.includes(ContentType.IMG)) {
-      const content = this._arrayBufferToDataUrl(data.data);
-      this._saveFile(content, ContentType.IMG, type, id, path);
-    }
-    if (type.includes(ContentType.TEXT)) {
-      const content = ab2str(file.data.data, 'utf-8');
-      this._saveFile(content, ContentType.TEXT, type, id, path);
-    }
+    const { id, mimeType: type, data, webkitRelativePath } = file;
+    const content = ab2str(data.data, 'utf-8');
+	const contentType = type.includes(ContentType.IMG) ? ContentType.IMG : ContentType.TEXT
+    this._saveFile(content, contentType, type, id, webkitRelativePath);
   }
 
   getBGFiles = () => this._BGFiles;
@@ -85,6 +79,7 @@ class BGFileManager {
     for (let file of files) {
       this._readArrayBufferFile(file);
     }
+
     return this.getBGFiles();
   };
 }

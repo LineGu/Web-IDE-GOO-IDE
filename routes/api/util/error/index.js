@@ -1,3 +1,4 @@
 exports.InvalidRequest = require('./InvalidRequest');
-exports.AlreadyExists = require('./AlreadyExists');
+exports.AlreadyExistsId = require('./AlreadyExistsId');
+exports.AlreadyExistsNickName = require('./AlreadyExistsNickName');
 exports.IncorrectAccount = require('./IncorrectAccount');

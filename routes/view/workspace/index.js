@@ -1,6 +1,6 @@
 const path = require('path');
 
-const render = require('../../../dist/server/AccountApp.js').default;
+const render = require('../../../dist/server/WorkspaceApp.js').default;
 const serialize = require('serialize-javascript');
 
 const fileManifest = require('../../../dist/client/manifest.json');

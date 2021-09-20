@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileContext } from '../model/EditingFile/Provider';
+import { FileContext } from '../model/editingFile';
 
 
 function useEditingFile() {

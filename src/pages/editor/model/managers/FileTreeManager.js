@@ -43,8 +43,11 @@ class FileTreeManager {
 
   createFileTree = (newFiles) => {
     const fileTree = { ...this.getFileTree() };
+	const currentFirstDirs = Object.keys(this.getFileTree())
     for (let file of newFiles) {
       const { name, webkitRelativePath, id } = file;
+	  const firstDir = webkitRelativePath.split('/')[0]
+	  if (currentFirstDirs.includes(firstDir)) return null
       const strPath = webkitRelativePath ? webkitRelativePath : name;
       this._insertFile(name, strPath, fileTree, id);
     }
@@ -52,6 +55,41 @@ class FileTreeManager {
     return this.getFileTree();
   };
 
+  updateFileTree = (BGFiles) => {
+	const fileTree = {} 
+	const keys = Object.keys(BGFiles) 
+    for (let key of keys) {
+	  const file = BGFiles[key]
+      const { name, path, id } = file;
+      this._insertFile(name, path, fileTree, id);
+    }
+	this.setFileTree(fileTree);
+    return this.getFileTree();
+  }
+
+  getDir = (dirPath) => {
+	const paths = dirPath.split('/')
+	const currentDirName = paths[paths.length-1]
+	let dir = this._fileTree
+	for (let dirName of paths.slice(0,paths.length - 1)){
+		dir = dir[dirName].children
+	}
+
+	return dir[currentDirName]
+  }
+
+  findChildFiles = (dir, childFiles) => {
+	for (let child of Object.values(dir.children)){
+		if(child.type === ModelType.FILE) childFiles.push(child.id)
+	  	else this.findChildFiles(child, childFiles)
+	}
+	return childFiles
+  }
+  
+  hasSameName = (path) => {
+	  return !! this.getDir(path)
+  }
+  
   getFileNamesSorted(files) {
     // 유틸로
     const names = Object.keys(files);

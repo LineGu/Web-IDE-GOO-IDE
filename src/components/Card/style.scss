@@ -1,5 +1,10 @@
 .Card {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
 	flex: 0 0 auto;
 	width:20rem;
-	height: 15vh;
+	height: fit-content;
+	
+	min-height: 12em;
 }

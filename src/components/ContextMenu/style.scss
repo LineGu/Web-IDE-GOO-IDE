@@ -1,0 +1,29 @@
+.ContextMenu {
+	position:fixed;
+	display:flex;
+	visibility: hidden;
+	flex-direction:column;
+	justify-content: center;
+	align-items: center;
+	background-color: #1E1E1E;
+	border: 1px solid #141414;
+	width: 120px;
+	height: fit-content;
+	font-size: 0.8em;
+	
+	li:nth-child(2) {
+		border-bottom: 1px solid #464646;
+	}
+	
+	li {
+		width: 100%;
+		padding: 4px 0px;
+		list-style:none;
+		text-align:center;
+	}
+	
+	li:hover {
+		background-color: #434C5E;
+		cursor:pointer;
+	}
+}

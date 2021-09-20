@@ -9,7 +9,7 @@ import style from './style.scss';
 
 function Body() {
 	const [editorValue, setEditorValue] = useState('');
-	const { openFile, fileOnScreen, SaveTemporaryFile } = useEditingFile()
+	const { openFile, fileOnScreen, SaveTemporaryFile,  } = useEditingFile()
 	const { files } = useProject()
 	let debouncer
 

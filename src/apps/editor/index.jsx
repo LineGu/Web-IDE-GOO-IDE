@@ -5,7 +5,7 @@ import Editor from 'pages/editor';
 
 const App = props => (
 	<Switch>
-		<Route path='/editor/:title' render={props => <Editor {...props} />} />
+		<Route path='/editor/:title/:id' render={props => <Editor {...props} />} />
 	</Switch>
 );
 export default App;

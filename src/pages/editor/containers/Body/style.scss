@@ -2,12 +2,15 @@
 	background-color:#1F1E1E;
 	width: 100%;
 	height: 100%;
+	div:nth-child(2) {
+		height: 96%;
+	}
 	textarea {
 		resize: none;
 		outline: none;
 		border:none;
 		width: 96%;
-		height: 96vh;
+		height: 100%;
 		background-color:#1F1E1E;
 		color: #ffffff;
 	}
@@ -21,7 +24,7 @@
 	
 	img {
 		max-width: 96%;
-		max-height: 96vh;
+		max-height: 87vh;
 	}
 	label {
 		color: #ffffff;

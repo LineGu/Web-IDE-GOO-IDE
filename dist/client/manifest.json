@@ -5,5 +5,5 @@
   "EditorApp.js": "/EditorApp.js",
   "WorkspaceApp.css": "/WorkspaceApp.css",
   "WorkspaceApp.js": "/WorkspaceApp.js",
-  "file.worker.worker.js": "/file.worker.worker.js"
+  "BGFile.worker.worker.js": "/BGFile.worker.worker.js"
 }

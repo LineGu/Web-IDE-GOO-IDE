@@ -15,14 +15,14 @@ function Header () {
 			{fileOnScreen ? 
 				<div className={style.Header_path}>
 					{fileOnScreen.path.split('/').map((dir,idx) => {
-				if(idx < fileOnScreen.path.length - 1) {
+				if(idx < fileOnScreen.paths.length - 1) {
 					return (
-					<React.Fragment key={dir}>
+					<React.Fragment key={dir + idx}>
 						<span><FcFolder/>{dir}</span>
 						<span className={style.Header_slash}>/</span>
 					</React.Fragment>)
 				}
-				return <span key={dir}><FcFile/>{dir}</span>
+				return <span key={dir + idx}><FcFile/>{dir}</span>
 			})}</div> : <hr/>}
 			{fileOnScreen ? <hr/> : null}
 		</div>

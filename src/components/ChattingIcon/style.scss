@@ -1,0 +1,35 @@
+.ChattingIcon {
+	display: flex;
+	position: fixed;
+	border-radius: 50%;
+	align-items: center;
+	justify-content: center;
+	svg {
+		width: 32px;
+		height: 32px;
+		margin-bottom: 4px;
+	}
+	color : #6877F6;
+	width: 40px;
+	height: 40px;
+	bottom: 5em;
+	right: 5em;
+
+	&:hover {
+		color: #ffffff;
+		width: 44px;
+		height: 44px;
+		opacity: 60%;
+		cursor: pointer;
+		border: 1px solid #3E8EED;
+	}
+}
+
+.blink {
+	animation: blink 0.5s linear infinite;
+}
+
+@keyframes blink {
+    0% { background-color:#60C7B7;}
+    100% { background-color:#6877F6; }
+}

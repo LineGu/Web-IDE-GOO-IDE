@@ -8,7 +8,7 @@ import style from './style.scss'
 
 const visibleState = {}
 
-const FolderBlock = ({ fileName, path, children }) => {
+const FolderBlock = ({ fileName, path, onContextMenu, children }) => {
 	const { files, moveDir, moveFile } = useProject()
 	const { fileOnScreen, setFileOnScreen, editingFiles, setEditingFiles, openFile, getFileObj } = useEditingFile()
 	const initState = visibleState[path] === true ? true : false
@@ -24,6 +24,7 @@ const FolderBlock = ({ fileName, path, children }) => {
 		const draggedId = e.target.id
 		e.dataTransfer.setData('id', draggedId)
 		e.dataTransfer.setData('type', 'dir')
+		e.stopPropagation()
 	}
 	
 	const onMouseOver = (e) => {
@@ -58,44 +59,34 @@ const FolderBlock = ({ fileName, path, children }) => {
 	const onDrop = (e) => {
 		e.stopPropagation()
 		e.preventDefault()
-		document.querySelectorAll('li').forEach((elem) => elem.style.backgroundColor = '#232323')
+		document.querySelectorAll('li').forEach((elem) => { 
+			const isOpenedFile = fileOnScreen && fileOnScreen.id === elem.id
+			if (!isOpenedFile) elem.style.backgroundColor = '#232323'
+		})
 		const id = e.dataTransfer.getData('id')
 		const type = e.dataTransfer.getData('type')
+
 		if ( type === 'dir') {
-			const newPath = moveDir(id, e.currentTarget.id)
-			const newEditingFiles = editingFiles.map((file) => {
-				if (file.includes(id)) {
-					file.replace(id,newPath)
-					return file
-				} 
-				return file
-			})
-			setEditingFiles(newEditingFiles)
-		}
-		if ( type === 'file') {
-			const newPath = moveFile(id, e.currentTarget.id)
-			editingFiles.forEach((file,idx) => {
-				if (file === id) {
-					console.log(editingFiles)
-					editingFiles[idx] = newPath
-					console.log(editingFiles)
-				}
-			})
-			
-			if (fileOnScreen && fileOnScreen.path.join('/') === id) {
-				const newFile = getFileObj(newPath)
-				console.log(newFile)
-				setFileOnScreen(newFile)
+			if (id === e.currentTarget.id){
+				alert('같은 폴더 안으로는 옮길 수 없습니다')
+				return
 			}
-			setEditingFiles([...editingFiles])
-		}
+			moveDir(id, e.currentTarget.id)
+			const isVisibleDir = visibleState[id.split('/')]
+			const draggedDirName = id.split('/')[id.split('/').length - 1]
+			const newPath = e.currentTarget.id + '/' + draggedDirName
+			visibleState[newPath.split('/')] = isVisibleDir
+			delete visibleState[id]
+		} 
+		if ( type === 'file') moveFile(id, e.currentTarget.id)
 		e.dataTransfer.clearData()
 	}
 	
 	const depth = path.length
+
 	
 	return (
-	<li draggable onClick={toggle} className={style.Folder} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onDrop={onDrop} onDragOver={onDragOver} onDragEnter={onDragEnter} onDragLeave={onDragLeave} id={path.join('/')} onDragStart={onDragStart}>
+	<li draggable onClick={toggle} className={[style.Folder,'folder'].join(' ')} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onDrop={onDrop} onDragOver={onDragOver} onDragEnter={onDragEnter} onDragLeave={onDragLeave} id={path.join('/')} onDragStart={onDragStart} onContextMenu={onContextMenu}>
 		{isOpen ? <IoIosArrowDown style={{marginLeft: `${depth*1.2}em`}}/> : <IoIosArrowForward style={{marginLeft: `${depth*1.2}em`}}/>}
 		{isOpen ? <FcOpenedFolder/> : <FcFolder/>}
 		{fileName}

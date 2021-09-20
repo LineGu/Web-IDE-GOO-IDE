@@ -1,4 +1,4 @@
-import BGFileManager from './managers/BGFileManager';
+import BGFileManager from '../managers/BGFileManager';
 import axios from 'axios';
 
 self.onmessage = async function (e) {

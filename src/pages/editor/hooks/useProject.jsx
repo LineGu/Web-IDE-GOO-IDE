@@ -1,5 +1,5 @@
 import React from 'react'
-import { ProjectContext } from '../model/provider'
+import { ProjectContext } from '../model/project'
 
 function useProject () {
 	const props = React.useContext(ProjectContext)
