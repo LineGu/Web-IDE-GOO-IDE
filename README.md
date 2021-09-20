@@ -1,76 +1,99 @@
-## 구름 과제 템플릿
+# Goo IDe
 
----
-- 아래 내용 및 템플릿을 외부에 공유하지 말아 주시고 github, 블로그 등에 소스코드를 올리실 경우 회사 이름 혹은 서비스 이름으로 검색되지 않게 해주세요.
-- 프로젝트의 주요 기능에 대해서는 주요 스펙은 꼭 지켜주시기 바랍니다.
-- [구름IDE](https://ide.goorm.io)로 개발을 합니다.
----
+`웹` IDE로 어디서든 개발하자!
 
-### 프로젝트 목적
-- Node.js, Socket.io, MongoDB, React, Bootstrap 이용해보기
+## 개발 기간
+2021.08.10 - 2021.08.31 (추후 추가 개발 예정)
 
-### 프로젝트 주요 기능
-아래 기능을 구현하기 위한 템플릿 수정은 자유롭게 하시면 됩니다.
-- 파일 매니저 기능
-  - 파일/폴더 구조를 가진 프로젝트를 업로드 합니다.
-    - zip, tar를 지원합니다.
-  - 업로드 된 프로젝트를 풀어 ul과 li를 이용해 리스트를 만듭니다.
-    - 디렉토리 구조는 [폴더1]/[폴더2]/파일 과 같이 하여 리스트업합니다.
-      - 폴더1 안에 폴더2가 있고, 그 안에 파일이 있는 구조입니다.
-    - 예를 들어, abc폴더 안에 def 폴더가 있고, 그 안에 main.c, main.py 파일들이 있다면,
-      - abc/def/main.c
-      - abc/def/main.py
-      - 이렇게 두 파일이 보여야 합니다.
-  - 해당 디렉토리 밑에 있는 파일에 대해 [읽기/쓰기] 가능하도록 합니다.
-    - 읽기 - 파일명을 클릭하면 textarea에 파일 내용이 보입니다.
-    - 쓰기 -  textarea에서 내용을 편집하고 저장 버튼을 눌러 저장합니다.
-	
-- 채팅 기능
-  - 채팅을 할 수 있습니다.
-  - 소켓을 이용하여 실시간으로 메시지를 주고 받습니다.
-  - 새로고침이나 재접속을 하여도 채팅 내역은 남습니다.
-  - 귓속말을 통해 1:1 메시지 교환도 가능합니다.
-    - (서버) 귓속말 구현 시, 내용을 모든 상대에게 보내면 안됩니다. 
-    - 반드시 <받는 사람>만 내용을 받아야 합니다.
-	
-### 프로젝트 UI
-- 메인 화면
-  - 파일매니저, 채팅 기능과 관련하여 알맞는 UI와 기능들이 구현되어 있으면 됩니다.
-  - 구성은 자유로우며 각 화면을 single 페이지 또는 multiple 페이지로 구현하는 것도 자유입니다.
+## 기능별 안내
 
-### 프로젝트 기술 스택
-- Back-end
-  - Node.js, Socket.io, MongoDB, Redis, ExpressJs 사용
-  
-- Front-end
-  - React, Bootsrap, Reactstrap, React-router 사용
-  - Redux, MobX 등을 사용하지 않고 state를 관리합니다.
-  
-- 개발 환경
-  - OS: Ubuntu 18.04.2 LTS
-  - 브라우저: 크롬
-  - Nodejs: 14.17.2
+### 로그인 
+로그인을 통해 프로젝트 단위로 코드와 멤버를 관리할 수 있습니다.
+![](https://i.imgur.com/rm1AheW.png)
 
-위에 언급되지 않은 라이브러리는 자유롭게 설치해서 사용하셔도 됩니다.
-  
-### 템플릿 실행
-- 실행 전 작업
-  - DB 설치
-    - `cd scripts && ./installDb.sh` 명령어로 Mongodb, Redis를 설치합니다.
-  - npm package 설치
-    - `npm install` 명령어로 npm package를 설치합니다.
-	
-- 실행
-  - DB 실행
-    - `./scripts/startDb.sh` 명령어로 Mongodb, Redis를 시작합니다.
-  - App Build
-    - `npm run build:prd`로 Production 모드로 빌드합니다.
-    - 또는 `npm run build:dev`로 Development 모드로 빌드합니다.
-  - App Start
-    - `npm run start:prd`로 Production 모드로 실행합니다.
-    - 또는 `npm run start:dev`로 Development 모드로 실행합니다.
+### 회원가입
+간편한 회원가입을 통해 이용 가능합니다!
+![](https://i.imgur.com/XQ4M0uZ.png)
 
-- 실행 결과 확인
-  - 상단 메뉴 [프로젝트] -> [실행 URL과 포트]에서 실행되고 있는 Port(기본 포트는 3000)와 관련된 URL를 브라우저 검색창에 입력하면 실행 결과를 확인할 수 있습니다.
-  
+### 워크스페이스
+자신이 만든 프로젝트와 멤버로 활동하고 있는 프로젝트를 한곳에서 볼 수 있습니다.
+플러스 버튼을 통해 쉽게 프로젝트를 추가할 수 있습니다.
+![](https://i.imgur.com/5VpkIl6.png)
+
+### IDE
+새로운 프로젝트를 생성한 후 가장 첫 IDE 화면입니다.
+![](https://i.imgur.com/3LVHn0W.png)
+
+### 파일 및 폴더 추가
+사이드바 상단 버튼을 통해 폴더와 파일을 불러올 수 있습니다.
+`zip`, `tar` 형식의 압축 파일도 불러올 수 있습니다.
+
+용량이 큰 파일이나 폴더를 불러올 땐, `Worker`를 이용한 멀티쓰레드로 버벅임 없이 빠르게 불러올 수 있습니다!
+![](https://i.imgur.com/r6LikcX.png)
+
+사이드바 상단 버튼으로 `프로젝트 멤버 추가`, `저장`, `폴더 불러오기`, `파일 불러오기` 가 가능합니다! 저장은 Ctrl + S 로도 가능합니다.
+![](https://i.imgur.com/JmnbUfa.png)
+
+### Drag And Drop
+Drag And Drop으로 폴더와 파일을 쉽게 이동시킬 수 있습니다.
+![](https://i.imgur.com/XCEz6RB.gif)
+
+### 파일 내용 
+파일 내용을 변경하고 저장하면 변경 사항이 빠르게 반영됩니다.
+![](https://i.imgur.com/mV9Og1n.gif)
+
+### 상단 NAV BAR
+상단 Nav Bar 를 통해 열기, 닫기, 순서 재정렬이 가능합니다.
+![](https://i.imgur.com/cjA95hc.gif)
+
+
+### 컨텍스트 메뉴
+GOO IDE만의 Context Menu로 파일 새로 만들기, 이름 변경, 삭제가 가능합니다.
+![](https://i.imgur.com/6O3duXt.gif)
+
+### 멤버 초대
+프로젝트에 멤버를 초대하여, 함께 개발이 가능하고 프로젝트 멤버들과 채팅이 가능합니다.
+
+초대 시에 자동 검색을 통해 쉽게 여러명의 멤버를 한번에 초대할 수 있습니다.
+![](https://i.imgur.com/nscuxFs.png)
+
+![](https://i.imgur.com/ZhP4zEH.png)
+
+
+### 채팅
+프로젝트 멤버들과 실시간 채팅이 가능합니다. 
+개인적인 내용이 있다면 귓속말 기능을 이용할 수 있습니다!
+
+채팅 내역은 사라지지 않으며 언제든 참고하실 수 있습니다.
+![](https://i.imgur.com/VgXhOWF.png)
+
+![](https://i.imgur.com/sthEuZ7.png)
+
+### 추후 개발 예정 기능 
+* 동시 편집
+* 터미널
+* 코드미러 도입
+
+### 개발적 특징
+* Worker를 이용한 Multi Thread 경험
+* Next.js 없이 SSR 적용.
+* Socket.io를 이용한 실시간 양방향 통신 경험
+* FileReader와 Multer를 이용한 File Data 관리 경험.
+* Tree 구조를 이용한 모델 관리 경험
+* Redis로 Session 관리
+* Mongoose로 데이터 관리
+* NodeMailer를 이용하여 에러 발생 시 메일로 발송. 빠른 대처 가능
+
+### 사용한 기술
+
+* Java Script
+* Node.js
+* Worker
+* Multer
+* React
+* Socket.io
+* Express.js
+* Mongoose
+* Redis
+* NodeMailer
 
